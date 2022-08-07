@@ -8,9 +8,9 @@ use App\Models\Role;
 use App\Models\Photo;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use Prophecy\Call\Call;
 use App\Models\Tag;
 use App\Models\Video;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -270,4 +270,26 @@ FORM VALIDATION CRUD APPLICATION
 [-----------------------------------------------------------------------
 */
 
-Route::resource('/post', PostController::class);
+Route::group(['middleware' => 'web'], function () {
+    Route::resource('/post', PostController::class);
+    Route::get('/dates', function () {
+        $date = new DateTime(('+1 week'));
+        echo $date->format('d-m-Y');
+        echo '<br>';
+
+        echo Carbon::now()->addDays(10)->diffForHumans();
+        echo '<br>';
+        echo Carbon::now()->subMonths(5)->diffForHumans();
+    });
+
+    // ACCESSOR
+    Route::get('/getName', function () {
+        $user = User::find(1);
+        echo $user;
+    });
+    Route::get('/setName', function () {
+        $user = User::find(1);
+        $user->name = "will smith";
+        $user->save();
+    });
+});

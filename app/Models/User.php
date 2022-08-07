@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\Photo;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -63,5 +64,17 @@ class User extends Authenticatable
     public function photos()
     {
         return $this->morphMany(Photo::class, 'imageable');
+    }
+
+
+    // accessor
+    public function getNameAttribute($value)
+    {
+        return strtoupper($value);
+    }
+    // mutator
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtoupper($value);
     }
 }

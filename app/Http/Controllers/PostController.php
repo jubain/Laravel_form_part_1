@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
 
@@ -14,7 +15,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        //$posts = Post::all();
+        $posts = Post::latest()->get();
         return view('posts.index', compact('posts'));
     }
 
@@ -34,8 +36,14 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
+        // $this->validate($request, [
+        //     'title' => 'required ',
+        //     'content' => 'required',
+        // ]);
+
+
         Post::create($request->all());
         return redirect('/posts');
         // $post = new Post();
