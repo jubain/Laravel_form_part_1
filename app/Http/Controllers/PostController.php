@@ -38,25 +38,35 @@ class PostController extends Controller
      */
     public function store(CreatePostRequest $request)
     {
+        // Upload Files
+        $file = $request->file('file');
+
+        // Get file original name
+        $file->getClientOriginalName();
+
+        // Validation inside store function
         // $this->validate($request, [
         //     'title' => 'required ',
         //     'content' => 'required',
         // ]);
+        $input = $request->all();
 
+        // Check if there is file
+        if ($file = $request->file('file')) {
+            $name = $file->getClientOriginalName();
+            // Create a new folder called images inside public directory
+            $file->move('images', $name);
 
-        Post::create($request->all());
+            $input['path'] = $name;
+        }
+
+        Post::create($input);
         return redirect('/posts');
         // $post = new Post();
         // $post->title = $request->title;
         // $post->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $post = Post::findOrFail($id);
